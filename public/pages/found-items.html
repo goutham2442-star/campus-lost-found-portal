@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Found items | CampusFind — Sai University</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body data-type="Found">
+  <div class="announcement">
+    <span class="announcement-dot"></span> Sai University Lost & Found Portal — A kinder campus starts with the little things 
+    <a href="/pages/how-it-works.html">See how it works ↗</a>
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="/">
+      <span class="brand-symbol"><span></span><span></span></span>
+      <span class="brand-name">campus<span>find</span><small>SAI UNIVERSITY COMMUNITY BOARD</small></span>
+    </a>
+    <button class="mobile-menu" id="mobile-menu" aria-label="Toggle navigation">☰</button>
+    <nav class="main-nav" id="main-nav">
+      <a href="/">Discover</a>
+      <a href="/pages/lost-items.html">Lost items</a>
+      <a class="active" href="/pages/found-items.html">Found items</a>
+      <a href="/pages/how-it-works.html">How it works</a>
+    </nav>
+    <div class="header-actions">
+      <!-- Populated by app.js -->
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="eyebrow"><span class="eyebrow-line"></span> SOMEONE DID THE RIGHT THING</div>
+      <h1>Found on campus.<br><em>Looking for home.</em></h1>
+      <p>These belongings have been reported found across campus halls. Recognize something that is yours? Submit an ownership claim for verification.</p>
+    </section>
+
+    <section class="page-content">
+      <div class="section-topline">
+        <div>
+          <div class="eyebrow">THE FOUND SHELF</div>
+          <h2>Items waiting to be reunited with their owners.</h2>
+        </div>
+        <a class="button button-plum" href="/pages/report.html?type=Found">Report a found item ↗</a>
+      </div>
+
+      <div class="page-toolbar" style="margin-top:25px">
+        <input id="list-search" type="search" placeholder="Search by item, keywords, brand, or campus location..." aria-label="Search reports">
+        <select id="list-category" aria-label="Category">
+          <option>All categories</option>
+          <option>Electronics</option>
+          <option>Accessories</option>
+          <option>ID & Cards</option>
+          <option>Keys</option>
+          <option>Books & Notes</option>
+          <option>Clothing</option>
+          <option>Other</option>
+        </select>
+        <select id="list-sort" aria-label="Sort">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="az">Name A–Z</option>
+        </select>
+      </div>
+
+      <div class="page-count" id="page-count">Loading reports…</div>
+      <div class="listing-grid" id="listing-grid"></div>
+
+      <div class="page-empty" id="page-empty" hidden>
+        <h3>No reports match those filters.</h3>
+        <p>Try searching different keywords or add a report to the community board.</p>
+        <a class="button button-plum" href="/pages/report.html?type=Found">Report Found Item ↗</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="brand" href="/">
+      <span class="brand-symbol"><span></span><span></span></span>
+      <span class="brand-name">campus<span>find</span><small>SAI UNIVERSITY COMMUNITY BOARD</small></span>
+    </a>
+    <p>Sai University Academic Project · 2026</p>
+    <div>
+      <a href="/pages/how-it-works.html">How it works</a>
+      <a href="/pages/report.html">Report an item</a>
+      <a href="/pages/lost-items.html">Lost items</a>
+    </div>
+  </footer>
+
+  <script src="/app.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get("q");
+      const cat = params.get("category");
+      if (q && document.querySelector("#list-search")) {
+        document.querySelector("#list-search").value = q;
+      }
+      if (cat && document.querySelector("#list-category")) {
+        document.querySelector("#list-category").value = cat;
+      }
+    });
+  </script>
+</body>
+</html>

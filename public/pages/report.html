@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report an item | CampusFind — Sai University</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="announcement">
+    <span class="announcement-dot"></span> Every helpful report brings someone one step closer 
+    <a href="/pages/how-it-works.html">How it works ↗</a>
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="/">
+      <span class="brand-symbol"><span></span><span></span></span>
+      <span class="brand-name">campus<span>find</span><small>SAI UNIVERSITY COMMUNITY BOARD</small></span>
+    </a>
+    <button class="mobile-menu" id="mobile-menu" aria-label="Toggle navigation">☰</button>
+    <nav class="main-nav" id="main-nav">
+      <a href="/">Discover</a>
+      <a href="/pages/lost-items.html">Lost items</a>
+      <a href="/pages/found-items.html">Found items</a>
+      <a href="/pages/how-it-works.html">How it works</a>
+    </nav>
+    <div class="header-actions">
+      <!-- Populated by app.js -->
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="eyebrow"><span class="eyebrow-line"></span> ADD YOUR PIECE TO THE PUZZLE</div>
+      <h1>Every little detail<br>can <em>make a difference.</em></h1>
+      <p>Tell the campus community what went missing—or what you found. Keep private serials or security details safe.</p>
+    </section>
+
+    <section class="page-content">
+      <div class="report-layout">
+        <div class="form-card">
+          <h2>Tell us about the item.</h2>
+          <p>Fields marked with * are required. Our intelligent system checks for matching reports in real time.</p>
+
+          <!-- Duplicate Item Alert Box Container -->
+          <div id="duplicate-alert-container"></div>
+
+          <form id="report-page-form" enctype="multipart/form-data">
+            <div class="form-two-col">
+              <label>
+                What kind of report? *
+                <select name="type" id="report-type" required>
+                  <option value="Lost">I lost something</option>
+                  <option value="Found">I found something</option>
+                </select>
+              </label>
+              <label>
+                Category *
+                <select name="category" required>
+                  <option value="Electronics">Electronics</option>
+                  <option value="Accessories">Accessories</option>
+                  <option value="ID & Cards">ID & Cards</option>
+                  <option value="Keys">Keys</option>
+                  <option value="Books & Notes">Books & Notes</option>
+                  <option value="Clothing">Clothing</option>
+                  <option value="Other">Other</option>
+                </select>
+              </label>
+            </div>
+
+            <label>
+              Item name / brief title *
+              <input name="name" maxlength="80" required placeholder="e.g. Navy blue metal bottle / Sony Earbuds">
+            </label>
+
+            <div class="form-two-col">
+              <label>
+                Where was it lost or found? *
+                <input name="location" maxlength="100" required placeholder="e.g. Library 1st Floor / Block C Room 204">
+              </label>
+              <label>
+                Date *
+                <input name="date" type="date" required>
+              </label>
+            </div>
+
+            <label>
+              Helpful details & description *
+              <textarea name="description" rows="4" maxlength="1000" required placeholder="Colour, brand, stickers, keychain, or visible identifying details..."></textarea>
+            </label>
+
+            <!-- Image Upload Section -->
+            <label>
+              Item Photo (Optional but highly recommended)
+              <div class="upload-dropzone" onclick="document.querySelector('#item-image-input').click()">
+                <div style="font-size:24px;margin-bottom:6px;">📷</div>
+                <strong style="font-size:12px;color:var(--plum);">Click to select or drag & drop an image</strong>
+                <p style="font-size:10px;color:#9b94a6;margin:4px 0 0;">JPG, PNG, or WebP up to 5MB</p>
+                <input type="file" id="item-image-input" name="image" accept="image/jpeg,image/png,image/webp" style="display:none;">
+                <img id="item-image-preview" class="image-preview" alt="Upload preview">
+              </div>
+            </label>
+
+            <p class="form-message" id="report-page-message" role="status"></p>
+            <button class="button button-plum" type="submit">Publish to Community Board <span>↗</span></button>
+          </form>
+        </div>
+
+        <aside>
+          <div class="side-card">
+            <h3>A few helpful tips.</h3>
+            <p>Clear details make matching much faster.</p>
+            <div class="side-tip">
+              <div class="side-tip-icon">✎</div>
+              <div>
+                <strong>Be specific</strong>
+                <span>Colour, shape, and unique marks can immediately help identify an item.</span>
+              </div>
+            </div>
+            <div class="side-tip">
+              <div class="side-tip-icon">⌖</div>
+              <div>
+                <strong>Share a useful place</strong>
+                <span>Name the campus hall, academic block, or recreation facility.</span>
+              </div>
+            </div>
+            <div class="side-tip">
+              <div class="side-tip-icon">♡</div>
+              <div>
+                <strong>Smart Duplicate Alerts</strong>
+                <span>Our system compares keywords as you type to notify you of potential matches.</span>
+              </div>
+            </div>
+            <div class="info-callout">
+              Notice: Do not post banking pin codes, sensitive national ID numbers, or passwords.
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="brand" href="/">
+      <span class="brand-symbol"><span></span><span></span></span>
+      <span class="brand-name">campus<span>find</span><small>SAI UNIVERSITY COMMUNITY BOARD</small></span>
+    </a>
+    <p>Sai University Academic Project · 2026</p>
+    <div>
+      <a href="/pages/how-it-works.html">How it works</a>
+      <a href="/pages/my-activity.html">My activity</a>
+    </div>
+  </footer>
+
+  <script src="/app.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      const reportTypeSelect = document.querySelector("#report-type");
+      if (params.get("type") && reportTypeSelect) {
+        reportTypeSelect.value = params.get("type");
+      }
+    });
+  </script>
+</body>
+</html>

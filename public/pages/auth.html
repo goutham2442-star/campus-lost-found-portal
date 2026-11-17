@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Access | CampusFind — Sai University</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="announcement">
+    <span class="announcement-dot"></span> Sai University Lost & Found Portal Authentication
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="/">
+      <span class="brand-symbol"><span></span><span></span></span>
+      <span class="brand-name">campus<span>find</span><small>SAI UNIVERSITY COMMUNITY BOARD</small></span>
+    </a>
+    <button class="mobile-menu" id="mobile-menu" aria-label="Toggle navigation">☰</button>
+    <nav class="main-nav" id="main-nav">
+      <a href="/">Discover</a>
+      <a href="/pages/lost-items.html">Lost items</a>
+      <a href="/pages/found-items.html">Found items</a>
+      <a href="/pages/how-it-works.html">How it works</a>
+    </nav>
+    <div class="header-actions">
+      <!-- Populated by app.js -->
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="eyebrow"><span class="eyebrow-line"></span> SECURE CAMPUS LOGIN</div>
+      <h1>Join the <em>community</em><br>board.</h1>
+      <p>Sign in with your university credentials to report missing belongings, submit ownership claims, or review claims as an administrator.</p>
+    </section>
+
+    <section class="page-content" style="max-width:560px;margin:0 auto;">
+      <!-- Toggle Tabs -->
+      <div class="activity-tabs" style="justify-content:center;margin-bottom:24px;">
+        <button id="tab-login" class="active" onclick="switchAuthTab('login')">Sign In</button>
+        <button id="tab-register" onclick="switchAuthTab('register')">Create Account</button>
+      </div>
+
+      <!-- Login Form Card -->
+      <div class="form-card" id="card-login">
+        <h2>Sign In to CampusFind</h2>
+        <p>Enter your student or administrator email to manage your reports and claims.</p>
+        <form id="login-form">
+          <label>
+            University Email Address *
+            <input type="email" name="email" required placeholder="e.g. yourname@saiuniversity.edu.in">
+          </label>
+          <label>
+            Password *
+            <input type="password" name="password" required placeholder="••••••••">
+          </label>
+          <p class="form-message" id="login-message" role="status"></p>
+          <button class="button button-plum" type="submit">Sign In to CampusFind <span>↗</span></button>
+        </form>
+
+        <div class="info-callout" style="margin-top:20px;">
+          <strong>Quick Demo Accounts:</strong><br>
+          • <strong>Student:</strong> <code>aarav.sharma@saiuniversity.edu.in</code> | pass: <code>password123</code><br>
+          • <strong>Admin:</strong> <code>admin@saiuniversity.edu.in</code> | pass: <code>AdminSaiPass2026!</code>
+        </div>
+      </div>
+
+      <!-- Registration Form Card -->
+      <div class="form-card" id="card-register" style="display:none;">
+        <h2>Create Student Account</h2>
+        <p>Register with your university details to join the campus lost and found community.</p>
+        <form id="register-form">
+          <label>
+            Full Name *
+            <input type="text" name="name" required placeholder="e.g. Maya Krishnan">
+          </label>
+          <label>
+            University Email Address *
+            <input type="email" name="email" required placeholder="e.g. maya.krishnan@saiuniversity.edu.in">
+          </label>
+          <div class="form-two-col">
+            <label>
+              Department / Major
+              <input type="text" name="department" placeholder="e.g. Computer Science / Arts">
+            </label>
+            <label>
+              Contact Phone (Optional)
+              <input type="tel" name="phone" placeholder="e.g. +91 98765 00000">
+            </label>
+          </div>
+          <div class="form-two-col">
+            <label>
+              Password *
+              <input type="password" name="password" minlength="6" required placeholder="At least 6 characters">
+            </label>
+            <label>
+              Confirm Password *
+              <input type="password" name="confirmPassword" minlength="6" required placeholder="Re-enter password">
+            </label>
+          </div>
+          <p class="form-message" id="register-message" role="status"></p>
+          <button class="button button-plum" type="submit">Register Account <span>↗</span></button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="brand" href="/">
+      <span class="brand-symbol"><span></span><span></span></span>
+      <span class="brand-name">campus<span>find</span><small>SAI UNIVERSITY COMMUNITY BOARD</small></span>
+    </a>
+    <p>Sai University Academic Project · 2026</p>
+    <div>
+      <a href="/pages/how-it-works.html">How it works</a>
+      <a href="/pages/report.html">Report item</a>
+    </div>
+  </footer>
+
+  <script src="/app.js"></script>
+  <script>
+    function switchAuthTab(tab) {
+      const loginCard = document.querySelector("#card-login");
+      const regCard = document.querySelector("#card-register");
+      const tabLogin = document.querySelector("#tab-login");
+      const tabReg = document.querySelector("#tab-register");
+
+      if (tab === "register") {
+        loginCard.style.display = "none";
+        regCard.style.display = "block";
+        tabLogin.classList.remove("active");
+        tabReg.classList.add("active");
+      } else {
+        loginCard.style.display = "block";
+        regCard.style.display = "none";
+        tabLogin.classList.add("active");
+        tabReg.classList.remove("active");
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("mode") === "register") {
+        switchAuthTab("register");
+      }
+
+      // Handle Login
+      document.querySelector("#login-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const msg = document.querySelector("#login-message");
+        msg.textContent = "";
+        msg.className = "form-message";
+
+        const data = Object.fromEntries(new FormData(e.target).entries());
+        try {
+          const res = await apiFetch("/api/auth/login", {
+            method: "POST",
+            body: JSON.stringify(data)
+          });
+          Auth.setSession(res.token, res.user);
+          toast("Welcome back, " + res.user.name + "!");
+          setTimeout(() => {
+            const redirect = params.get("redirect") || (res.user.role === "admin" ? "/pages/admin.html" : "/pages/my-activity.html");
+            window.location.href = redirect;
+          }, 800);
+        } catch (err) {
+          msg.textContent = err.message;
+          msg.classList.add("error");
+        }
+      });
+
+      // Handle Register
+      document.querySelector("#register-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const msg = document.querySelector("#register-message");
+        msg.textContent = "";
+        msg.className = "form-message";
+
+        const data = Object.fromEntries(new FormData(e.target).entries());
+        if (data.password !== data.confirmPassword) {
+          msg.textContent = "Passwords do not match.";
+          msg.classList.add("error");
+          return;
+        }
+
+        try {
+          const res = await apiFetch("/api/auth/register", {
+            method: "POST",
+            body: JSON.stringify(data)
+          });
+          Auth.setSession(res.token, res.user);
+          toast("Account registered successfully! Welcome to CampusFind.");
+          setTimeout(() => {
+            window.location.href = "/pages/my-activity.html";
+          }, 900);
+        } catch (err) {
+          msg.textContent = err.message;
+          msg.classList.add("error");
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,367 @@
+{
+  "info": {
+    "_postman_id": "7f3e82d1-d245-4299-9b7e-97c9b88ef11a",
+    "name": "CampusFind API Test Suite — Sai University",
+    "description": "Comprehensive Postman test collection with automated test assertions for all CampusFind REST endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Successful User Registration",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 201 Created', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "pm.test('Returns JWT auth token', function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.success).to.be.true;",
+              "    pm.expect(json.token).to.be.a('string');",
+              "    pm.environment.set('authToken', json.token);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Ravi Teja\",\n  \"email\": \"ravi.teja@saiuniversity.edu.in\",\n  \"password\": \"studentPass2026\",\n  \"confirmPassword\": \"studentPass2026\",\n  \"department\": \"Engineering\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/register",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "register"]
+        }
+      }
+    },
+    {
+      "name": "2. Successful Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Returns valid token & user info', function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.success).to.be.true;",
+              "    pm.expect(json.token).to.be.a('string');",
+              "    pm.expect(json.user.email).to.eql('aarav.sharma@saiuniversity.edu.in');",
+              "    pm.environment.set('studentToken', json.token);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"aarav.sharma@saiuniversity.edu.in\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "3. Invalid Login Credentials",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 401 Unauthorized', function () {",
+              "    pm.response.to.have.status(401);",
+              "});",
+              "pm.test('Returns clear failure message', function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.success).to.be.false;",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"aarav.sharma@saiuniversity.edu.in\",\n  \"password\": \"wrongPasswordX\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "4. Create Item Report (Lost / Found)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 201 Created', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "pm.test('Item created with active status', function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.success).to.be.true;",
+              "    pm.expect(json.item.name).to.eql('Mechanical Pencil Set');",
+              "    pm.environment.set('itemId', json.item.id);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{studentToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Mechanical Pencil Set\",\n  \"category\": \"Books & Notes\",\n  \"type\": \"Found\",\n  \"location\": \"Architecture Hall 3B\",\n  \"date\": \"2026-11-10\",\n  \"description\": \"Rotring 0.5mm silver mechanical pencil with extra lead tube left on drawing board.\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/items",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "items"]
+        }
+      }
+    },
+    {
+      "name": "5. Retrieve Items (Search & Filtering)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Returns items list with pagination metadata', function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.success).to.be.true;",
+              "    pm.expect(json.items).to.be.an('array');",
+              "    pm.expect(json.total).to.be.at.least(1);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/items?type=Found&category=Electronics",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "items"],
+          "query": [
+            { "key": "type", "value": "Found" },
+            { "key": "category", "value": "Electronics" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "6. Update Item Report",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Item updated properly', function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.success).to.be.true;",
+              "    pm.expect(json.item.location).to.include('Handed over to Security');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{studentToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"location\": \"Architecture Hall 3B (Handed over to Security Desk)\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/items/{{itemId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "items", "{{itemId}}"]
+        }
+      }
+    },
+    {
+      "name": "7. Submit Claim for Found Item",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 201 Created or 400 if already submitted', function () {",
+              "    pm.expect([201, 400]).to.include(pm.response.code);",
+              "});",
+              "if (pm.response.code === 201) {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.claim.status).to.eql('Pending');",
+              "    pm.environment.set('claimId', json.claim.id);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{studentToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"itemId\": \"{{targetFoundItemId}}\",\n  \"contact\": \"aarav.sharma@saiuniversity.edu.in\",\n  \"proof\": \"Engraved initials 'RS' on inner frame clasp.\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/claims",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "claims"]
+        }
+      }
+    },
+    {
+      "name": "8. Unauthorized Access Attempt (Protected Route)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 401 Unauthorized', function () {",
+              "    pm.response.to.have.status(401);",
+              "});",
+              "pm.test('Error indicates token is missing', function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.success).to.be.false;",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/me",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "me"]
+        }
+      }
+    },
+    {
+      "name": "9. Admin Approves or Rejects a Claim",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Claim status updated', function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.success).to.be.true;",
+              "    pm.expect(json.claim.status).to.eql('Approved');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"Approved\",\n  \"adminRemark\": \"Identity and serial details matched by Campus Security.\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/claims/{{claimId}}/status",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "claims", "{{claimId}}", "status"]
+        }
+      }
+    },
+    {
+      "name": "10. Check Duplicate Reports (Alert System)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Duplicate engine identifies matching items', function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.success).to.be.true;",
+              "    pm.expect(json.hasPotentialMatches).to.be.a('boolean');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"wireless earbuds sony\",\n  \"category\": \"Electronics\",\n  \"type\": \"Lost\",\n  \"location\": \"Library\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/items/check-duplicates",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "items", "check-duplicates"]
+        }
+      }
+    }
+  ]
+}

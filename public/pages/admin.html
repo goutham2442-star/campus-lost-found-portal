@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrator Dashboard | CampusFind — Sai University</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="announcement">
+    <span class="announcement-dot"></span> Sai University Campus Administration & Security Desk
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="/">
+      <span class="brand-symbol"><span></span><span></span></span>
+      <span class="brand-name">campus<span>find</span><small>CAMPUS SECURITY CONTROL</small></span>
+    </a>
+    <button class="mobile-menu" id="mobile-menu" aria-label="Toggle navigation">☰</button>
+    <nav class="main-nav" id="main-nav">
+      <a href="/">Discover</a>
+      <a href="/pages/lost-items.html">Lost items</a>
+      <a href="/pages/found-items.html">Found items</a>
+      <a href="/pages/admin.html" class="active">Admin Portal</a>
+    </nav>
+    <div class="header-actions">
+      <!-- Populated by app.js -->
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="eyebrow"><span class="eyebrow-line"></span> ADMINISTRATIVE MANAGEMENT & VERIFICATION</div>
+      <h1>Campus Security <em>Command.</em></h1>
+      <p>Review incoming student claims, inspect proof of ownership, manage listings, and update recovery statuses across the university.</p>
+    </section>
+
+    <section class="page-content">
+      <!-- Admin Stats Grid -->
+      <div class="dashboard-grid">
+        <div class="dash-card">
+          <div class="dash-card-icon" style="background:#eee9fa;color:var(--plum);">👥</div>
+          <h4>Registered Students</h4>
+          <strong id="adm-users-count">0</strong>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-icon" style="background:#e4f2e8;color:#4b966d;">📦</div>
+          <h4>Total Items Logged</h4>
+          <strong id="adm-items-count">0</strong>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-icon" style="background:#fae9df;color:#bd806a;">⚖️</div>
+          <h4>Pending Claims</h4>
+          <strong id="adm-claims-count">0</strong>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-icon" style="background:#fdf4d8;color:#a07e1c;">✨</div>
+          <h4>Returned Items</h4>
+          <strong id="adm-returned-count">0</strong>
+        </div>
+      </div>
+
+      <!-- Admin Tab Navigation -->
+      <div class="activity-tabs" style="margin-top:20px;">
+        <button id="adm-tab-claims" class="active" onclick="switchAdminTab('claims')">Ownership Claims Queue</button>
+        <button id="adm-tab-items" onclick="switchAdminTab('items')">All Reported Items</button>
+        <button id="adm-tab-users" onclick="switchAdminTab('users')">Registered Users</button>
+      </div>
+
+      <!-- Panel: Claims Queue -->
+      <div id="adm-panel-claims">
+        <div class="page-toolbar">
+          <span style="font-weight:700;font-size:12px;color:#554c62;">Filter Claims:</span>
+          <select id="adm-claim-filter" onchange="loadAdminClaims()">
+            <option value="All">All Claims</option>
+            <option value="Pending" selected>Pending Review</option>
+            <option value="Approved">Approved Claims</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Completed">Completed / Handed Over</option>
+          </select>
+          <span id="adm-claims-count-label" class="page-count" style="margin:0 0 0 auto;">Loading…</span>
+        </div>
+        <div class="activity-list" id="adm-claims-list">
+          <p>Loading claims queue…</p>
+        </div>
+      </div>
+
+      <!-- Panel: All Items -->
+      <div id="adm-panel-items" style="display:none;">
+        <div class="page-toolbar">
+          <input type="search" id="adm-item-search" placeholder="Filter items by title or location..." oninput="filterAdminItems()">
+          <select id="adm-item-type-filter" onchange="filterAdminItems()">
+            <option value="All">All Types</option>
+            <option value="Lost">Lost</option>
+            <option value="Found">Found</option>
+          </select>
+        </div>
+        <div class="activity-list" id="adm-items-list">
+          <p>Loading catalog items…</p>
+        </div>
+      </div>
+
+      <!-- Panel: Registered Users -->
+      <div id="adm-panel-users" style="display:none;">
+        <div class="activity-list" id="adm-users-list">
+          <p>Loading registered users…</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="brand" href="/">
+      <span class="brand-symbol"><span></span><span></span></span>
+      <span class="brand-name">campus<span>find</span><small>CAMPUS SECURITY CONTROL</small></span>
+    </a>
+    <p>Sai University Academic Project · 2026</p>
+    <div>
+      <a href="/pages/how-it-works.html">How it works</a>
+      <a href="/pages/my-activity.html">My activity</a>
+    </div>
+  </footer>
+
+  <script src="/app.js"></script>
+  <script>
+    let allAdminItemsCache = [];
+
+    function switchAdminTab(tab) {
+      document.querySelector("#adm-tab-claims").classList.toggle("active", tab === "claims");
+      document.querySelector("#adm-tab-items").classList.toggle("active", tab === "items");
+      document.querySelector("#adm-tab-users").classList.toggle("active", tab === "users");
+
+      document.querySelector("#adm-panel-claims").style.display = tab === "claims" ? "block" : "none";
+      document.querySelector("#adm-panel-items").style.display = tab === "items" ? "block" : "none";
+      document.querySelector("#adm-panel-users").style.display = tab === "users" ? "block" : "none";
+
+      if (tab === "claims") loadAdminClaims();
+      if (tab === "items") loadAdminItems();
+      if (tab === "users") loadAdminUsers();
+    }
+
+    async function loadAdminStats() {
+      try {
+        const data = await apiFetch("/api/stats/admin-dashboard");
+        const s = data.stats || {};
+        document.querySelector("#adm-users-count").textContent = s.totalUsers || 0;
+        document.querySelector("#adm-items-count").textContent = s.totalItems || 0;
+        document.querySelector("#adm-claims-count").textContent = s.pendingClaims || 0;
+        document.querySelector("#adm-returned-count").textContent = s.returnedItems || 0;
+      } catch (err) {
+        toast("Admin stats error: " + err.message);
+      }
+    }
+
+    async function loadAdminClaims() {
+      const container = document.querySelector("#adm-claims-list");
+      const filter = document.querySelector("#adm-claim-filter").value;
+      container.innerHTML = "<p>Loading claims queue…</p>";
+
+      try {
+        const data = await apiFetch(`/api/claims/admin/all?status=${filter}`);
+        const claims = data.claims || [];
+        document.querySelector("#adm-claims-count-label").textContent = `${claims.length} claims in view`;
+
+        if (claims.length === 0) {
+          container.innerHTML = `<p class="page-empty">No claims match the selected filter (${filter}).</p>`;
+          return;
+        }
+
+        container.innerHTML = claims.map(c => `
+          <div class="activity-row" style="flex-direction:column;align-items:stretch;gap:12px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div class="activity-emoji">${c.item?.emoji || "📦"}</div>
+                <div>
+                  <strong>Item: ${esc(c.item?.name || "Deleted item")}</strong>
+                  <small>Claimant: ${esc(c.claimant?.name || "Student")} (${esc(c.claimant?.email)}) · Contact: ${esc(c.contact)}</small>
+                </div>
+              </div>
+              <span class="pill ${c.status === 'Pending' ? 'pending' : c.status === 'Rejected' ? 'rejected' : 'claimed'}">
+                ${esc(c.status)}
+              </span>
+            </div>
+
+            <div style="background:#fcfaf8;border:1px solid #f1ece4;border-radius:10px;padding:12px;font-size:12px;">
+              <strong style="display:block;margin-bottom:4px;color:#5a5166;">Claimant Proof & Identifying Notes:</strong>
+              <span style="color:#776d83;line-height:1.6;">${esc(c.proof)}</span>
+            </div>
+
+            ${c.adminRemark ? `
+              <div style="font-size:11px;color:var(--plum);font-weight:700;">
+                Current Admin Remark: ${esc(c.adminRemark)}
+              </div>
+            ` : ""}
+
+            <div style="display:flex;gap:10px;justify-content:flex-end;border-top:1px solid #f4f0ee;padding-top:10px;">
+              ${c.status === "Pending" ? `
+                <button class="button button-danger button-small" onclick="promptClaimAction('${c.id || c._id}', 'Rejected')">Reject Claim</button>
+                <button class="button button-success button-small" onclick="promptClaimAction('${c.id || c._id}', 'Approved')">Approve Claim</button>
+              ` : c.status === "Approved" ? `
+                <button class="button button-plum button-small" onclick="promptClaimAction('${c.id || c._id}', 'Completed')">Mark Returned to Student ✓</button>
+              ` : `
+                <span style="font-size:11px;color:#9b94a6;">Decision Finalized</span>
+              `}
+            </div>
+          </div>
+        `).join("");
+      } catch (err) {
+        container.innerHTML = `<p class="form-message error">${esc(err.message)}</p>`;
+      }
+    }
+
+    async function promptClaimAction(claimId, status) {
+      const remark = prompt(`Enter administrative note / remark for marking this claim "${status}":`, `Verified by campus security.`);
+      if (remark === null) return; // user cancelled
+
+      try {
+        await apiFetch(`/api/claims/${claimId}/status`, {
+          method: "PATCH",
+          body: JSON.stringify({ status, adminRemark: remark })
+        });
+        toast(`Claim status updated to ${status}.`);
+        loadAdminClaims();
+        loadAdminStats();
+      } catch (err) {
+        toast("Failed to update claim: " + err.message);
+      }
+    }
+
+    async function loadAdminItems() {
+      const container = document.querySelector("#adm-items-list");
+      container.innerHTML = "<p>Loading catalog items…</p>";
+      try {
+        const data = await apiFetch("/api/items?limit=100");
+        allAdminItemsCache = data.items || [];
+        renderAdminItems(allAdminItemsCache);
+      } catch (err) {
+        container.innerHTML = `<p class="form-message error">${esc(err.message)}</p>`;
+      }
+    }
+
+    function filterAdminItems() {
+      const search = document.querySelector("#adm-item-search").value.toLowerCase();
+      const type = document.querySelector("#adm-item-type-filter").value;
+      const filtered = allAdminItemsCache.filter(i => {
+        const matchesSearch = !search || (i.name + " " + i.location).toLowerCase().includes(search);
+        const matchesType = type === "All" || i.type === type;
+        return matchesSearch && matchesType;
+      });
+      renderAdminItems(filtered);
+    }
+
+    function renderAdminItems(items) {
+      const container = document.querySelector("#adm-items-list");
+      if (items.length === 0) {
+        container.innerHTML = "<p class='page-empty'>No items found.</p>";
+        return;
+      }
+      container.innerHTML = items.map(i => `
+        <div class="activity-row">
+          <div class="activity-emoji">${esc(i.emoji || "📦")}</div>
+          <div class="activity-main">
+            <strong>${esc(i.name)} (${esc(i.type)})</strong>
+            <small>Category: ${esc(i.category)} · Location: ${esc(i.location)} · Status: ${esc(i.status)}</small>
+          </div>
+          <div class="activity-actions">
+            <span class="pill ${i.type === 'Lost' ? 'pending' : ''}">${esc(i.status)}</span>
+            <button class="button button-outline button-small" onclick="adminDeleteItem('${i.id || i._id}')">Remove Listing</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    async function adminDeleteItem(id) {
+      if (!confirm("Are you sure you want to permanently remove this listing?")) return;
+      try {
+        await apiFetch(`/api/items/${id}`, { method: "DELETE" });
+        toast("Listing removed.");
+        loadAdminItems();
+        loadAdminStats();
+      } catch (err) {
+        toast(err.message);
+      }
+    }
+
+    async function loadAdminUsers() {
+      const container = document.querySelector("#adm-users-list");
+      container.innerHTML = "<p>Loading users…</p>";
+      try {
+        const data = await apiFetch("/api/stats/admin/users");
+        const users = data.users || [];
+        container.innerHTML = users.map(u => `
+          <div class="activity-row">
+            <div class="activity-emoji">👤</div>
+            <div class="activity-main">
+              <strong>${esc(u.name)}</strong>
+              <small>Email: ${esc(u.email)} · Dept: ${esc(u.department || "General")} · Role: ${esc(u.role)}</small>
+            </div>
+            <span class="pill ${u.role === 'admin' ? 'claimed' : ''}">${esc(u.role.toUpperCase())}</span>
+          </div>
+        `).join("");
+      } catch (err) {
+        container.innerHTML = `<p class="form-message error">${esc(err.message)}</p>`;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      if (!Auth.isAdmin()) {
+        alert("Access forbidden. This portal requires Campus Administrator credentials.");
+        window.location.href = "/pages/auth.html";
+        return;
+      }
+      loadAdminStats();
+      loadAdminClaims();
+    });
+  </script>
+</body>
+</html>
