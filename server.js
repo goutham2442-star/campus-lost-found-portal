@@ -84,31 +84,31 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 10. Start Server and Initialize Database
-async function startServer() {
-  try {
-    // Connect to MongoDB or local persistent storage
-    await initDB();
+// 10. Start Server and Initialize Database (Only when run directly, not when imported by Vercel serverless)
+if (require.main === module) {
+  async function startServer() {
+    try {
+      await initDB();
 
-    // Auto-seed sample university records if database is fresh
-    const itemCount = await ItemRepository.count();
-    if (itemCount === 0) {
-      console.log("[Setup] Database empty. Seeding initial campus records...");
-      await seedDatabase();
+      const itemCount = await ItemRepository.count();
+      if (itemCount === 0) {
+        console.log("[Setup] Database empty. Seeding initial campus records...");
+        await seedDatabase();
+      }
+
+      app.listen(PORT, () => {
+        console.log(`=======================================================`);
+        console.log(`🚀 CampusFind is live at: http://localhost:${PORT}`);
+        console.log(`🎓 Sai University Web Technology Project`);
+        console.log(`=======================================================`);
+      });
+    } catch (err) {
+      console.error("Critical: Failed to start server:", err);
+      process.exit(1);
     }
-
-    app.listen(PORT, () => {
-      console.log(`=======================================================`);
-      console.log(`🚀 CampusFind is live at: http://localhost:${PORT}`);
-      console.log(`🎓 Sai University Web Technology Project`);
-      console.log(`=======================================================`);
-    });
-  } catch (err) {
-    console.error("Critical: Failed to start server:", err);
-    process.exit(1);
   }
-}
 
-startServer();
+  startServer();
+}
 
 module.exports = app;
