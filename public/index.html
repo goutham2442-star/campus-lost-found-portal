@@ -3,216 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="CampusFind is the official student lost and found portal for Sai University.">
-  <title>CampusFind — Student Lost and Found Portal</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>CampusFind — Lost and Found Portal</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <div class="announcement">
-    <span class="announcement-dot"></span> Sai University Lost & Found Portal — A kinder campus starts with the little things 
-    <a href="/pages/how-it-works.html">See how it works ↗</a>
+  <div class="top-notice">
+    Sai University Lost & Found Portal — Student Project
+    <a href="/pages/how-it-works.html">How it works</a>
   </div>
 
-  <header class="site-header">
-    <a class="brand" href="/">
-      <span class="brand-symbol"><span></span><span></span></span>
-      <span class="brand-name">campus<span>find</span><small>SAI UNIVERSITY COMMUNITY BOARD</small></span>
+  <header class="site-navbar">
+    <a class="brand-title" href="/">
+      🎓 Campus<span>Find</span>
     </a>
-    <button class="mobile-menu" id="mobile-menu" aria-label="Toggle navigation">☰</button>
-    <nav class="main-nav" id="main-nav">
-      <a class="active" href="/">Discover</a>
-      <a href="/pages/lost-items.html">Lost items</a>
-      <a href="/pages/found-items.html">Found items</a>
-      <a href="/pages/how-it-works.html">How it works</a>
-    </nav>
-    <div class="header-actions">
-      <!-- Populated dynamically by app.js based on auth state -->
+    <ul class="nav-links" id="main-nav">
+      <li><a class="active" href="/">Home</a></li>
+      <li><a href="/pages/lost-items.html">Lost Items</a></li>
+      <li><a href="/pages/found-items.html">Found Items</a></li>
+      <li><a href="/pages/how-it-works.html">How It Works</a></li>
+    </ul>
+    <div class="nav-user-actions header-actions">
+      <!-- Injected by app.js based on login state -->
     </div>
   </header>
 
-  <main>
-    <section class="hero hero-home">
-      <div class="hero-copy">
-        <div class="eyebrow"><span class="eyebrow-line"></span> LOST OR FOUND SOMETHING ON CAMPUS?</div>
-        <h1>Some things<br>deserve a <em>way back.</em></h1>
-        <p class="hero-lead">A familiar place, an honest community, and one thoughtful report can reunite students with what matters most.</p>
-        <div class="hero-buttons">
-          <a class="button button-plum" href="/pages/lost-items.html">I lost an item <span>↗</span></a>
-          <a class="button button-cream" href="/pages/report.html?type=Found">I found something <span>↗</span></a>
-        </div>
-        <div class="hero-social">
-          <div class="avatar-pile">
-            <span>🎧</span><span>🪪</span><span>🔑</span>
-          </div>
-          <div>
-            <strong>Verified Campus Community.</strong>
-            <small>Built for Sai University students and faculty.</small>
-          </div>
+  <main class="container">
+    <!-- Clean Student Hero Section -->
+    <section class="hero-box">
+      <div class="hero-text">
+        <h1>Campus Lost & Found</h1>
+        <p>A simple portal for Sai University students to report, track, and recover misplaced personal belongings on campus.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="/pages/lost-items.html">Browse Lost Items</a>
+          <a class="btn btn-secondary" href="/pages/report.html?type=Found">Report Found Item</a>
         </div>
       </div>
-      <div class="hero-visual">
-        <div class="visual-blob"></div>
-        <div class="visual-sun"></div>
-        <div class="floating-caption caption-top">
-          <span class="caption-check">↗</span>
-          <span><b>A little found.</b><small>A big relief.</small></span>
-        </div>
-        <div class="illustration-scene">
-          <div class="book book-back"></div>
-          <div class="book book-front"><div class="book-label">FIELD<br>NOTES</div></div>
-          <div class="phone">
-            <div class="phone-speaker"></div>
-            <div class="phone-screen">
-              <span>campusfind</span>
-              <div class="phone-icon">✓</div>
-              <b>It's been found!</b>
-              <small>One less thing to worry about.</small>
-            </div>
-          </div>
-          <div class="keyring">
-            <div class="key-loop"></div>
-            <div class="key key-one"></div>
-            <div class="key key-two"></div>
-          </div>
-          <div class="mini-flower">✳</div>
-          <div class="mini-star">✦</div>
-        </div>
-        <div class="floating-caption caption-bottom">
-          <span class="caption-heart">♡</span>
-          <span><b>Community First</b><small>Every small act matters.</small></span>
-        </div>
-        <div class="visual-footnote">LOST → FOUND → BACK TO YOU</div>
-      </div>
-    </section>
 
-    <!-- Global Search Bar Section -->
-    <section class="home-search-section">
-      <div class="home-search-box">
-        <span style="font-size:18px;color:#8f7db0;">🔍</span>
-        <input type="text" id="home-search-input" placeholder="Search for student ID, keys, earphones, bottle, notebook, or campus hall...">
-        <select id="home-category-select">
-          <option value="">All Categories</option>
-          <option value="Electronics">Electronics</option>
-          <option value="Accessories">Accessories</option>
-          <option value="ID & Cards">ID & Cards</option>
-          <option value="Keys">Keys</option>
-          <option value="Books & Notes">Books & Notes</option>
-          <option value="Clothing">Clothing</option>
-          <option value="Other">Other</option>
-        </select>
-        <button class="button button-plum button-small" onclick="handleHomeSearch()">Search Board ↗</button>
-      </div>
-    </section>
-
-    <!-- Platform Live Statistics Counter -->
-    <section class="quick-stats">
-      <div class="quick-stat">
-        <span class="stat-icon stat-lilac">↗</span>
-        <div>
+      <!-- Quick Platform Stats -->
+      <div class="stats-card">
+        <h3>Campus Statistics</h3>
+        <div class="stats-row">
+          <span>Total Reports:</span>
           <strong id="total-count">0</strong>
-          <small>Total Reports Filed</small>
         </div>
-      </div>
-      <div class="quick-stat">
-        <span class="stat-icon stat-green">✓</span>
-        <div>
+        <div class="stats-row">
+          <span>Found Items:</span>
           <strong id="found-count">0</strong>
-          <small>Found Belongings</small>
         </div>
-      </div>
-      <div class="quick-stat">
-        <span class="stat-icon stat-peach">♡</span>
-        <div>
+        <div class="stats-row">
+          <span>Lost Items:</span>
           <strong id="lost-count">0</strong>
-          <small>Still Being Searched</small>
         </div>
-      </div>
-      <div class="quick-stat">
-        <span class="stat-icon stat-yellow">★</span>
-        <div>
+        <div class="stats-row">
+          <span>Returned Items:</span>
           <strong id="returned-count">0</strong>
-          <small>Successfully Returned</small>
         </div>
       </div>
     </section>
 
-    <!-- Recently Reported Items -->
-    <section class="section-wrap recent-section" id="recent">
-      <div class="section-topline">
-        <div>
-          <div class="eyebrow">THE COMMUNITY BOARD</div>
-          <h2>Recently <em>noticed.</em></h2>
-          <p class="section-description">A few things that have made their way onto the board across campus buildings.</p>
-        </div>
-        <a class="text-link desktop-link" href="/pages/found-items.html">See all found items ↗</a>
-      </div>
-      <div class="recent-grid" id="recent-grid">
-        <p>Loading recent reports…</p>
-      </div>
-      <div class="center-action" style="margin-top:35px;display:flex;justify-content:center;gap:15px;">
-        <a class="button button-outline" href="/pages/lost-items.html">Browse Lost Items <span>↗</span></a>
-        <a class="button button-plum" href="/pages/found-items.html">Browse Found Items <span>↗</span></a>
-      </div>
+    <!-- Global Search -->
+    <section class="search-card">
+      <span style="font-size:16px;">🔍</span>
+      <input type="text" id="home-search-input" placeholder="Search by item name or location (e.g. Earbuds, Library, Calculator)...">
+      <select id="home-category-select">
+        <option value="">All Categories</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Accessories">Accessories</option>
+        <option value="ID & Cards">ID & Cards</option>
+        <option value="Keys">Keys</option>
+        <option value="Books & Notes">Books & Notes</option>
+        <option value="Clothing">Clothing</option>
+        <option value="Other">Other</option>
+      </select>
+      <button class="btn btn-primary btn-sm" onclick="handleHomeSearch()">Search</button>
     </section>
 
-    <!-- Three Step Workflow Preview -->
-    <section class="how-preview">
-      <div class="how-preview-intro">
-        <div class="eyebrow">NOTHING COMPLICATED</div>
-        <h2>Three little steps.<br><em>One big relief.</em></h2>
-        <p>Because finding your belongings should feel easier than losing them.</p>
-        <a class="text-link" href="/pages/how-it-works.html">A closer look at how it works ↗</a>
+    <!-- Recent Items Feed -->
+    <section>
+      <div class="section-header">
+        <h2>Recently Reported Items</h2>
+        <a href="/pages/found-items.html" class="btn btn-secondary btn-sm">View All Found Items</a>
       </div>
-      <a class="preview-step" href="/pages/report.html">
-        <span class="preview-number">01 / REPORT</span>
-        <div class="preview-art art-note">✎</div>
-        <h3>Share what happened.</h3>
-        <p>Report what you lost or found. Our Duplicate Alert System warns if it's already logged.</p>
-        <span class="step-arrow">↗</span>
-      </a>
-      <a class="preview-step" href="/pages/found-items.html">
-        <span class="preview-number">02 / DISCOVER</span>
-        <div class="preview-art art-search">⌕</div>
-        <h3>Look a little closer.</h3>
-        <p>Search by keywords, category, or the campus location it was last seen.</p>
-        <span class="step-arrow">↗</span>
-      </a>
-      <a class="preview-step" href="/pages/how-it-works.html">
-        <span class="preview-number">03 / REUNITE</span>
-        <div class="preview-art art-heart">♡</div>
-        <h3>Make the connection.</h3>
-        <p>Submit a verified claim with proof of ownership for campus security approval.</p>
-        <span class="step-arrow">↗</span>
-      </a>
-    </section>
-
-    <!-- Closing Callout -->
-    <section class="closing-cta">
-      <div class="cta-decoration">✳</div>
-      <div>
-        <div class="eyebrow eyebrow-light">HAVE YOU SEEN SOMETHING?</div>
-        <h2>Be the reason it<br><em>gets home.</em></h2>
-        <p>One thoughtful report can turn someone's entire academic day around.</p>
+      <div class="cards-grid" id="recent-grid">
+        <p style="color:#64748b;">Loading recent reports...</p>
       </div>
-      <a class="button button-cream" href="/pages/report.html">Report a lost or found item <span>↗</span></a>
     </section>
   </main>
 
   <footer class="site-footer">
-    <a class="brand" href="/">
-      <span class="brand-symbol"><span></span><span></span></span>
-      <span class="brand-name">campus<span>find</span><small>SAI UNIVERSITY COMMUNITY BOARD</small></span>
-    </a>
-    <p>Sai University Academic Project · 2026</p>
-    <div>
+    <div>CampusFind — Sai University Web Technology Project (2026)</div>
+    <div class="footer-links">
       <a href="/pages/lost-items.html">Lost</a>
       <a href="/pages/found-items.html">Found</a>
-      <a href="/pages/how-it-works.html">How it works</a>
-      <a href="/pages/my-activity.html">My activity</a>
-      <a href="/pages/auth.html">Portal Login</a>
+      <a href="/pages/report.html">Report</a>
+      <a href="/pages/how-it-works.html">How It Works</a>
     </div>
   </footer>
 

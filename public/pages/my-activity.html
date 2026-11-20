@@ -3,97 +3,74 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Activity & Dashboard | CampusFind — Sai University</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>My Dashboard | CampusFind — Sai University</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <div class="announcement">
-    <span class="announcement-dot"></span> Keep track of what's happening on your campus board 
-    <a href="/pages/report.html">Add a report ↗</a>
+  <div class="top-notice">
+    Sai University Lost & Found Portal — Student Project
+    <a href="/pages/how-it-works.html">How it works</a>
   </div>
 
-  <header class="site-header">
-    <a class="brand" href="/">
-      <span class="brand-symbol"><span></span><span></span></span>
-      <span class="brand-name">campus<span>find</span><small>SAI UNIVERSITY COMMUNITY BOARD</small></span>
+  <header class="site-navbar">
+    <a class="brand-title" href="/">
+      🎓 Campus<span>Find</span>
     </a>
-    <button class="mobile-menu" id="mobile-menu" aria-label="Toggle navigation">☰</button>
-    <nav class="main-nav" id="main-nav">
-      <a href="/">Discover</a>
-      <a href="/pages/lost-items.html">Lost items</a>
-      <a href="/pages/found-items.html">Found items</a>
-      <a href="/pages/how-it-works.html">How it works</a>
-    </nav>
-    <div class="header-actions">
-      <!-- Populated by app.js -->
+    <ul class="nav-links" id="main-nav">
+      <li><a href="/">Home</a></li>
+      <li><a href="/pages/lost-items.html">Lost Items</a></li>
+      <li><a href="/pages/found-items.html">Found Items</a></li>
+      <li><a href="/pages/how-it-works.html">How It Works</a></li>
+    </ul>
+    <div class="nav-user-actions header-actions">
+      <!-- Injected by app.js based on auth state -->
     </div>
   </header>
 
-  <main>
-    <section class="page-hero">
-      <div class="eyebrow"><span class="eyebrow-line"></span> YOUR PERSONAL CAMPUS FIND DASHBOARD</div>
-      <h1>A little <em>progress</em><br>goes a long way.</h1>
-      <p>Manage your reported lost and found items, inspect claim statuses, and verify ownership approvals directly.</p>
-    </section>
+  <div class="page-header-box">
+    <h1>My Activity & Dashboard</h1>
+    <p>Track items you reported and view status updates for submitted claims.</p>
+  </div>
 
-    <section class="page-content">
-      <!-- User Statistics Summary Grid -->
-      <div class="dashboard-grid">
-        <div class="dash-card">
-          <div class="dash-card-icon" style="background:#eee9fa;color:var(--plum);">📋</div>
-          <h4>My Total Reports</h4>
-          <strong id="dash-total-reports">0</strong>
-        </div>
-        <div class="dash-card">
-          <div class="dash-card-icon" style="background:#fae9df;color:#bd806a;">🔍</div>
-          <h4>Lost Items Reported</h4>
-          <strong id="dash-lost-reports">0</strong>
-        </div>
-        <div class="dash-card">
-          <div class="dash-card-icon" style="background:#e4f2e8;color:#4b966d;">🎁</div>
-          <h4>Found Items Reported</h4>
-          <strong id="dash-found-reports">0</strong>
-        </div>
-        <div class="dash-card">
-          <div class="dash-card-icon" style="background:#fdf4d8;color:#a07e1c;">🤝</div>
-          <h4>Submitted Claims</h4>
-          <strong id="dash-active-claims">0</strong>
-        </div>
+  <main class="container">
+    <!-- User Quick Statistics -->
+    <div class="dash-stats-grid">
+      <div class="dash-box">
+        <span>Total Reports</span>
+        <strong id="dash-total-reports">0</strong>
       </div>
+      <div class="dash-box">
+        <span>Lost Reports</span>
+        <strong id="dash-lost-reports">0</strong>
+      </div>
+      <div class="dash-box">
+        <span>Found Reports</span>
+        <strong id="dash-found-reports">0</strong>
+      </div>
+      <div class="dash-box">
+        <span>Claims Submitted</span>
+        <strong id="dash-active-claims">0</strong>
+      </div>
+    </div>
 
-      <div class="section-topline">
-        <div>
-          <div class="eyebrow">YOUR COMMUNITY ACTIVITY</div>
-          <h2>What's happening.</h2>
-        </div>
-        <a class="button button-plum" href="/pages/report.html">＋ New report</a>
-      </div>
+    <!-- Activity Nav Tabs -->
+    <div class="tab-nav">
+      <button class="active" data-activity="items">My Reported Items</button>
+      <button data-activity="claims">My Submitted Claims</button>
+    </div>
 
-      <!-- Activity Toggle Tabs -->
-      <div class="activity-tabs" style="margin-top:25px;">
-        <button class="active" data-activity="items">My Reported Items</button>
-        <button data-activity="claims">My Submitted Claims</button>
-      </div>
-
-      <!-- Activity List Container -->
-      <div class="activity-list" id="activity-list">
-        <p>Loading your activity…</p>
-      </div>
-    </section>
+    <div class="data-list" id="activity-list">
+      <p style="color:#64748b;">Loading activity...</p>
+    </div>
   </main>
 
   <footer class="site-footer">
-    <a class="brand" href="/">
-      <span class="brand-symbol"><span></span><span></span></span>
-      <span class="brand-name">campus<span>find</span><small>SAI UNIVERSITY COMMUNITY BOARD</small></span>
-    </a>
-    <p>Sai University Academic Project · 2026</p>
-    <div>
-      <a href="/pages/how-it-works.html">How it works</a>
-      <a href="/pages/report.html">Report an item</a>
+    <div>CampusFind — Sai University Web Technology Project (2026)</div>
+    <div class="footer-links">
+      <a href="/pages/lost-items.html">Lost</a>
+      <a href="/pages/found-items.html">Found</a>
+      <a href="/pages/report.html">Report</a>
+      <a href="/pages/how-it-works.html">How It Works</a>
     </div>
   </footer>
 

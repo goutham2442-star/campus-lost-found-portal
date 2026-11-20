@@ -127,26 +127,25 @@ async function setupHeader() {
     } catch (_) {}
 
     headerActions.innerHTML = `
-      <button class="notif-bell-btn" id="header-notif-btn" title="View Notifications" aria-label="Notifications">
-        🔔 ${unreadCount > 0 ? `<span class="notif-badge">${unreadCount}</span>` : ""}
+      <button class="btn-bell" id="header-notif-btn" title="View Notifications" aria-label="Notifications">
+        🔔 ${unreadCount > 0 ? `<span class="badge-counter">${unreadCount}</span>` : ""}
       </button>
-      <div class="header-user">
-        <a href="/pages/my-activity.html" class="user-chip">
-          <span>👤 ${esc(user.name.split(" ")[0])}</span>
-          <span class="role-tag">${esc(user.role)}</span>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <a href="/pages/my-activity.html" class="user-badge">
+          👤 ${esc(user.name.split(" ")[0])} (${esc(user.role)})
         </a>
-        <button class="btn-logout" id="header-logout-btn">Log out</button>
+        <button class="btn-signout" id="header-logout-btn">Log out</button>
       </div>
-      <a class="button button-ink button-small" href="/pages/report.html">＋ Report item</a>
+      <a class="btn btn-primary btn-sm" href="/pages/report.html">+ Report Item</a>
     `;
 
     document.querySelector("#header-logout-btn").addEventListener("click", () => Auth.logout());
     document.querySelector("#header-notif-btn").addEventListener("click", () => openNotificationModal());
   } else {
     headerActions.innerHTML = `
-      <a class="sign-in-link" href="/pages/auth.html">Sign in</a>
-      <a class="button button-outline button-small" href="/pages/auth.html?mode=register">Register</a>
-      <a class="button button-ink button-small" href="/pages/report.html">＋ Report item</a>
+      <a href="/pages/auth.html" style="font-weight:600; font-size:13px; color:#475569; margin-right:8px;">Sign in</a>
+      <a class="btn btn-secondary btn-sm" href="/pages/auth.html?mode=register">Register</a>
+      <a class="btn btn-primary btn-sm" href="/pages/report.html">+ Report Item</a>
     `;
   }
 }
@@ -159,13 +158,13 @@ async function openNotificationModal() {
     modal.id = "notif-modal";
     modal.className = "modal-overlay";
     modal.innerHTML = `
-      <div class="modal-card">
-        <div class="modal-header">
+      <div class="modal-window">
+        <div class="modal-head">
           <h3>Your Notifications</h3>
-          <button class="modal-close" onclick="closeNotificationModal()">✕</button>
+          <button class="modal-close-btn" onclick="closeNotificationModal()">✕</button>
         </div>
-        <div class="modal-body" id="notif-list-body">
-          <p>Loading notifications…</p>
+        <div id="notif-list-body">
+          <p style="color:#64748b;">Loading notifications…</p>
         </div>
       </div>
     `;
@@ -178,23 +177,23 @@ async function openNotificationModal() {
   try {
     const data = await apiFetch("/api/notifications");
     if (!data.notifications || data.notifications.length === 0) {
-      body.innerHTML = `<p class="page-empty">You have no notifications right now.</p>`;
+      body.innerHTML = `<p style="text-align:center; padding:20px; color:#64748b;">You have no notifications right now.</p>`;
       return;
     }
 
     body.innerHTML = `
       <div style="display:flex;justify-content:flex-end;margin-bottom:12px;">
-        <button class="button button-outline button-small" id="mark-all-read-btn">Mark all as read</button>
+        <button class="btn btn-secondary btn-sm" id="mark-all-read-btn">Mark all as read</button>
       </div>
-      <div class="activity-list">
+      <div class="data-list">
         ${data.notifications.map(n => `
-          <div class="activity-row" style="${n.isRead ? 'opacity:0.75;' : 'border-left:3px solid var(--plum);'}">
-            <div class="activity-emoji">${n.relatedItem?.emoji || "🔔"}</div>
-            <div class="activity-main">
-              <strong>${esc(n.title)}</strong>
-              <small>${esc(n.message)} · ${niceDate(n.createdAt)}</small>
+          <div class="data-item" style="${n.isRead ? 'opacity:0.75;' : 'border-left:3px solid #2563eb;'}">
+            <span style="font-size:20px;">${n.relatedItem?.emoji || "🔔"}</span>
+            <div style="flex:1;">
+              <strong style="font-size:13px; color:#0f172a; display:block;">${esc(n.title)}</strong>
+              <small style="color:#64748b;">${esc(n.message)} · ${niceDate(n.createdAt)}</small>
             </div>
-            ${!n.isRead ? `<button class="button button-small button-outline" onclick="markOneRead('${n.id}')">Read</button>` : ""}
+            ${!n.isRead ? `<button class="btn btn-secondary btn-sm" onclick="markOneRead('${n.id}')">Read</button>` : ""}
           </div>
         `).join("")}
       </div>
@@ -225,58 +224,57 @@ window.markOneRead = async function(id) {
 
 // Item Card Component
 function cardMarkup(item, compact = false) {
-  const bg = categoryColors[item.category] || "#f4f0fa";
   const itemId = item._id || item.id;
   const isFound = item.type === "Found";
 
   const imageOrEmoji = item.imageUrl
     ? `<img src="${esc(item.imageUrl)}" alt="${esc(item.name)}" loading="lazy">`
-    : `<span>${esc(item.emoji || "📦")}</span>`;
+    : `<span class="emoji">${esc(item.emoji || "📦")}</span>`;
 
   if (compact) {
     return `
-      <article class="mini-item">
-        <div class="mini-item-art" style="background:${bg}">
-          <span class="mini-item-badge ${isFound ? 'badge-found' : 'badge-lost'}">${esc(item.type.toUpperCase())}</span>
-          <span class="badge-status">${esc(item.status || "Active")}</span>
+      <div class="item-card">
+        <div class="item-card-top">
+          <span class="tag-badge ${isFound ? 'tag-found' : 'tag-lost'}">${esc(item.type)}</span>
+          <span class="tag-status">${esc(item.status || "Active")}</span>
           ${imageOrEmoji}
         </div>
-        <div class="mini-item-body">
-          <div class="mini-item-category">${esc(item.category)}</div>
+        <div class="item-card-body">
+          <span class="item-category">${esc(item.category)}</span>
           <h3>${esc(item.name)}</h3>
           <p>${esc(item.description)}</p>
-          <div class="mini-item-bottom">
-            <span>⌖ ${esc(item.location)}</span>
-            <a href="/pages/item-details.html?id=${itemId}">View Details ↗</a>
+          <div class="item-card-footer">
+            <span>📍 ${esc(item.location)}</span>
+            <a href="/pages/item-details.html?id=${itemId}" class="btn btn-secondary btn-sm">Details</a>
           </div>
         </div>
-      </article>
+      </div>
     `;
   }
 
   return `
-    <article class="mini-item">
-      <div class="mini-item-art" style="background:${bg}">
-        <span class="mini-item-badge ${isFound ? 'badge-found' : 'badge-lost'}">${esc(item.type.toUpperCase())}</span>
-        <span class="badge-status">${esc(item.status || "Active")}</span>
+    <div class="item-card">
+      <div class="item-card-top">
+        <span class="tag-badge ${isFound ? 'tag-found' : 'tag-lost'}">${esc(item.type)}</span>
+        <span class="tag-status">${esc(item.status || "Active")}</span>
         ${imageOrEmoji}
       </div>
-      <div class="mini-item-body">
-        <div class="mini-item-category">${esc(item.category)} · ${esc(niceDate(item.date))}</div>
+      <div class="item-card-body">
+        <span class="item-category">${esc(item.category)} · ${esc(niceDate(item.date))}</span>
         <h3>${esc(item.name)}</h3>
         <p>${esc(item.description)}</p>
-        <div class="mini-item-bottom">
-          <span>⌖ ${esc(item.location)}</span>
-          <div style="display:flex;gap:8px;align-items:center;">
-            <a href="/pages/item-details.html?id=${itemId}" class="text-link" style="font-size:11px;">Details ↗</a>
+        <div class="item-card-footer">
+          <span>📍 ${esc(item.location)}</span>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <a href="/pages/item-details.html?id=${itemId}" class="btn btn-secondary btn-sm">Details</a>
             ${isFound && item.status !== "Returned"
-              ? `<button class="button button-plum button-small" onclick="openClaimModal('${itemId}', '${esc(item.name).replace(/'/g, "\\'")}')">Claim</button>`
-              : `<span>${esc(item.status || "Searching")}</span>`
+              ? `<button class="btn btn-primary btn-sm" onclick="openClaimModal('${itemId}', '${esc(item.name).replace(/'/g, "\\'")}')">Claim</button>`
+              : `<span class="status-pill">${esc(item.status || "Active")}</span>`
             }
           </div>
         </div>
       </div>
-    </article>
+    </div>
   `;
 }
 
@@ -302,29 +300,27 @@ window.openClaimModal = function(itemId, itemName) {
   const defaultContact = user ? `${user.email}${user.phone ? ' | ' + user.phone : ''}` : "";
 
   modal.innerHTML = `
-    <div class="modal-card">
-      <div class="modal-header">
+    <div class="modal-window">
+      <div class="modal-head">
         <h3>Claim Item: ${esc(itemName)}</h3>
-        <button class="modal-close" onclick="closeClaimModal()">✕</button>
+        <button class="modal-close-btn" onclick="closeClaimModal()">✕</button>
       </div>
-      <div class="modal-body">
-        <p style="font-size:12px;color:#8f879b;margin:0 0 16px;">
-          To prevent fraudulent claims, describe identifying marks, contents, serial numbers, or features known only to the true owner.
-        </p>
-        <form id="claim-form">
-          <input type="hidden" name="itemId" value="${esc(itemId)}">
-          <label>
-            Your Verified Contact Information *
-            <input name="contact" required value="${esc(defaultContact)}" placeholder="Phone number or university email">
-          </label>
-          <label>
-            Proof of Ownership & Specific Details *
-            <textarea name="proof" rows="4" required placeholder="e.g. Scratches, brand label, phone lock wallpaper, contents of the notebook/bottle..."></textarea>
-          </label>
-          <p class="form-message" id="claim-modal-msg"></p>
-          <button type="submit" class="button button-plum">Submit Claim for Review ↗</button>
-        </form>
-      </div>
+      <p style="font-size:12px; color:#64748b; margin-bottom:14px;">
+        To prevent fraudulent claims, describe identifying marks, scratches, or details known only to the real owner.
+      </p>
+      <form id="claim-form">
+        <input type="hidden" name="itemId" value="${esc(itemId)}">
+        <div class="form-group" style="margin-bottom:12px;">
+          <label style="display:block; font-weight:600; font-size:13px; margin-bottom:4px;">Your Contact Info *</label>
+          <input name="contact" required value="${esc(defaultContact)}" placeholder="Phone number or campus email" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:4px;">
+        </div>
+        <div class="form-group" style="margin-bottom:12px;">
+          <label style="display:block; font-weight:600; font-size:13px; margin-bottom:4px;">Proof of Ownership / Details *</label>
+          <textarea name="proof" rows="4" required placeholder="e.g. Scratches, brand label, phone wallpaper, stickers..." style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:4px; font-family:inherit;"></textarea>
+        </div>
+        <p class="form-message" id="claim-modal-msg" style="margin-bottom:10px;"></p>
+        <button type="submit" class="btn btn-primary" style="width:100%;">Submit Claim</button>
+      </form>
     </div>
   `;
 
@@ -567,10 +563,10 @@ function setupActivity() {
 
   if (!Auth.isLoggedIn()) {
     list.innerHTML = `
-      <div class="page-empty">
-        <h3>Sign In Required</h3>
-        <p>Please sign in to view and manage your reported items and claims.</p>
-        <a class="button button-plum" href="/pages/auth.html">Sign In to Dashboard ↗</a>
+      <div style="text-align:center; padding:30px; background:white; border:1px solid #e2e8f0; border-radius:6px; color:#64748b;">
+        <h3 style="font-size:16px; color:#0f172a; margin-bottom:6px;">Sign In Required</h3>
+        <p style="font-size:13px; margin-bottom:12px;">Please sign in to view and manage your reported items and claims.</p>
+        <a class="btn btn-primary btn-sm" href="/pages/auth.html">Sign In to Dashboard</a>
       </div>
     `;
     return;
@@ -601,25 +597,25 @@ function setupActivity() {
 
         if (items.length === 0) {
           list.innerHTML = `
-            <div class="page-empty">
-              <h3>No items reported yet</h3>
-              <p>You haven't reported any lost or found items on campus.</p>
-              <a class="button button-plum" href="/pages/report.html">Report an Item ↗</a>
+            <div style="text-align:center; padding:30px; background:white; border:1px solid #e2e8f0; border-radius:6px; color:#64748b;">
+              <h3 style="font-size:16px; color:#0f172a; margin-bottom:6px;">No items reported yet</h3>
+              <p style="font-size:13px; margin-bottom:12px;">You haven't reported any lost or found items on campus.</p>
+              <a class="btn btn-primary btn-sm" href="/pages/report.html">+ Report an Item</a>
             </div>
           `;
           return;
         }
 
         list.innerHTML = items.map(i => `
-          <div class="activity-row">
-            <div class="activity-emoji">${esc(i.emoji || "📦")}</div>
-            <div class="activity-main">
-              <strong>${esc(i.name)}</strong>
-              <small>${esc(i.type)} report · ${esc(i.location)} · Reported on ${esc(niceDate(i.date))}</small>
+          <div class="data-item">
+            <span style="font-size:24px;">${esc(i.emoji || "📦")}</span>
+            <div style="flex:1;">
+              <strong style="font-size:14px; color:#0f172a;">${esc(i.name)}</strong>
+              <small style="display:block; color:#64748b;">${esc(i.type)} report · Location: ${esc(i.location)} · Reported on ${esc(niceDate(i.date))}</small>
             </div>
-            <div class="activity-actions">
-              <span class="pill ${i.type === 'Lost' ? 'pending' : ''}">${esc(i.status || "Active")}</span>
-              <button class="button button-outline button-small" onclick="deleteUserItem('${i.id || i._id}')">Delete</button>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <span class="status-pill ${i.type === 'Lost' ? 'pending' : 'approved'}">${esc(i.status || "Active")}</span>
+              <button class="btn btn-secondary btn-sm" onclick="deleteUserItem('${i.id || i._id}')">Delete</button>
             </div>
           </div>
         `).join("");
@@ -629,24 +625,24 @@ function setupActivity() {
 
         if (claims.length === 0) {
           list.innerHTML = `
-            <div class="page-empty">
-              <h3>No claims submitted</h3>
-              <p>You haven't submitted any ownership claims for found items.</p>
-              <a class="button button-plum" href="/pages/found-items.html">Browse Found Items ↗</a>
+            <div style="text-align:center; padding:30px; background:white; border:1px solid #e2e8f0; border-radius:6px; color:#64748b;">
+              <h3 style="font-size:16px; color:#0f172a; margin-bottom:6px;">No claims submitted</h3>
+              <p style="font-size:13px; margin-bottom:12px;">You haven't submitted any ownership claims for found items.</p>
+              <a class="btn btn-secondary btn-sm" href="/pages/found-items.html">Browse Found Items</a>
             </div>
           `;
           return;
         }
 
         list.innerHTML = claims.map(c => `
-          <div class="activity-row">
-            <div class="activity-emoji">${c.item?.emoji || "♡"}</div>
-            <div class="activity-main">
-              <strong>Claim for ${esc(c.item?.name || "Found Item")}</strong>
-              <small>Submitted on ${esc(niceDate(c.createdAt))} · Status: ${esc(c.status)}</small>
-              ${c.adminRemark ? `<small style="color:var(--plum);font-weight:700;">Admin Remark: ${esc(c.adminRemark)}</small>` : ""}
+          <div class="data-item">
+            <span style="font-size:24px;">${c.item?.emoji || "📦"}</span>
+            <div style="flex:1;">
+              <strong style="font-size:14px; color:#0f172a;">Claim for: ${esc(c.item?.name || "Found Item")}</strong>
+              <small style="display:block; color:#64748b;">Submitted: ${esc(niceDate(c.createdAt))} · Status: ${esc(c.status)}</small>
+              ${c.adminRemark ? `<small style="display:block; color:#1d4ed8; font-weight:600;">Admin Note: ${esc(c.adminRemark)}</small>` : ""}
             </div>
-            <span class="pill ${c.status === 'Pending' ? 'pending' : c.status === 'Rejected' ? 'rejected' : 'claimed'}">
+            <span class="status-pill ${c.status === 'Pending' ? 'pending' : c.status === 'Rejected' ? 'rejected' : 'approved'}">
               ${esc(c.status)}
             </span>
           </div>

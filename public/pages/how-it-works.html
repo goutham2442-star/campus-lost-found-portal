@@ -3,99 +3,86 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>How it works | CampusFind — Sai University</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>How It Works | CampusFind — Sai University</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <div class="announcement">
-    <span class="announcement-dot"></span> Sai University Lost & Found Portal — A kinder campus starts with the little things 
-    <a href="/pages/how-it-works.html">See how it works ↗</a>
+  <div class="top-notice">
+    Sai University Lost & Found Portal — Student Project
+    <a href="/pages/how-it-works.html">How it works</a>
   </div>
 
-  <header class="site-header">
-    <a class="brand" href="/">
-      <span class="brand-symbol"><span></span><span></span></span>
-      <span class="brand-name">campus<span>find</span><small>SAI UNIVERSITY COMMUNITY BOARD</small></span>
+  <header class="site-navbar">
+    <a class="brand-title" href="/">
+      🎓 Campus<span>Find</span>
     </a>
-    <button class="mobile-menu" id="mobile-menu" aria-label="Toggle navigation">☰</button>
-    <nav class="main-nav" id="main-nav">
-      <a href="/">Discover</a>
-      <a href="/pages/lost-items.html">Lost items</a>
-      <a href="/pages/found-items.html">Found items</a>
-      <a class="active" href="/pages/how-it-works.html">How it works</a>
-    </nav>
-    <div class="header-actions">
-      <!-- Populated by app.js -->
+    <ul class="nav-links" id="main-nav">
+      <li><a href="/">Home</a></li>
+      <li><a href="/pages/lost-items.html">Lost Items</a></li>
+      <li><a href="/pages/found-items.html">Found Items</a></li>
+      <li><a class="active" href="/pages/how-it-works.html">How It Works</a></li>
+    </ul>
+    <div class="nav-user-actions header-actions">
+      <!-- Injected by app.js based on auth state -->
     </div>
   </header>
 
-  <main>
-    <section class="page-hero">
-      <div class="eyebrow"><span class="eyebrow-line"></span> SIMPLE, TRANSPARENT, VERIFIED</div>
-      <h1>How CampusFind<br><em>works.</em></h1>
-      <p>A reliable, structured bridge between students who lose items, honest finders, and campus security staff to ensure safe handovers.</p>
-    </section>
+  <div class="page-header-box">
+    <h1>How CampusFind Works</h1>
+    <p>A simple step-by-step guide to reporting, finding, and claiming items on campus.</p>
+  </div>
 
-    <section class="page-content">
-      <div class="how-detail-grid">
-        <div class="how-detail">
-          <div class="big-number">STEP 01</div>
-          <div class="detail-icon">✎</div>
-          <h3>Report with Details</h3>
-          <p>Submit a lost or found report with item name, category, campus location, and optional photo. Our real-time Duplicate Alert System warns you if an identical item was already registered.</p>
-        </div>
-
-        <div class="how-detail">
-          <div class="big-number">STEP 02</div>
-          <div class="detail-icon">🔍</div>
-          <h3>Browse & Search</h3>
-          <p>Students can query the database by keywords, specific university buildings, categories, or dates. Advanced filters allow searching in real time across all active listings.</p>
-        </div>
-
-        <div class="how-detail">
-          <div class="big-number">STEP 03</div>
-          <div class="detail-icon">⚖️</div>
-          <h3>Claim & Administrative Verification</h3>
-          <p>Recognize your belonging? Click 'Claim' to explain unique ownership proof (serial number, internal contents, lock screens). Campus Security verifies ownership and marks the item returned.</p>
-        </div>
+  <main class="container">
+    <div class="form-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 30px;">
+      <div class="form-panel">
+        <h2>1. Report an Item</h2>
+        <p style="color:#64748b; font-size:13px; line-height:1.6;">
+          Lost something or found someone's item? Fill out the report form with the category, location, and a description. Our duplicate alert system lets you know if a similar report already exists.
+        </p>
       </div>
 
-      <!-- FAQ Section -->
-      <div class="faq">
-        <h2>Frequently asked questions</h2>
-        <details>
-          <summary>How does the Duplicate Item Alert System help me?</summary>
-          <p>When creating a new report, CampusFind analyzes your item name, location, and category against opposite listings (e.g. comparing a new lost report against active found items) to instantly show potential matches, preventing duplicated efforts.</p>
-        </details>
-        <details>
-          <summary>Can anyone claim a found item?</summary>
-          <p>Only authenticated students can submit claims. Claimants must provide verifiable ownership proofs (identifying markings, stickers, serials) that are reviewed by the campus administrator before items are released.</p>
-        </details>
-        <details>
-          <summary>Where can I track my submitted reports and claims?</summary>
-          <p>Under your personal 'My Activity' dashboard, you can track live statuses of all items you posted as well as incoming and outgoing recovery claims.</p>
-        </details>
-        <details>
-          <summary>What should I do if I find a high-value item?</summary>
-          <p>Submit a found report on CampusFind, leave out one unique identifying detail (to test potential claimants), and deposit the physical item at the Campus Security Desk.</p>
-        </details>
+      <div class="form-panel">
+        <h2>2. Search & Browse</h2>
+        <p style="color:#64748b; font-size:13px; line-height:1.6;">
+          Use the search bar or filters to look up lost and found items by building, date, or category. You can view all photos and specific details on the item details page.
+        </p>
       </div>
-    </section>
+
+      <div class="form-panel">
+        <h2>3. Claim & Recover</h2>
+        <p style="color:#64748b; font-size:13px; line-height:1.6;">
+          Found your item on the board? Click 'Claim' and describe identifying details (serial number, scratches, stickers). The campus administrator verifies your claim before handover.
+        </p>
+      </div>
+    </div>
+
+    <!-- Simple FAQ Box -->
+    <div class="form-panel">
+      <h2>Frequently Asked Questions</h2>
+      <div style="margin-bottom: 16px;">
+        <h4 style="font-size:14px; margin-bottom:4px; color:#0f172a;">Who can submit a claim?</h4>
+        <p style="color:#64748b; font-size:13px;">Any registered Sai University student can submit a claim for an item marked as 'Found'.</p>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <h4 style="font-size:14px; margin-bottom:4px; color:#0f172a;">How does the duplicate alert work?</h4>
+        <p style="color:#64748b; font-size:13px;">When typing an item title and location, the system compares your words with existing items so you don't file a duplicate report.</p>
+      </div>
+
+      <div>
+        <h4 style="font-size:14px; margin-bottom:4px; color:#0f172a;">What happens when my claim is approved?</h4>
+        <p style="color:#64748b; font-size:13px;">You will receive a notification and can collect the item from the Campus Security Desk.</p>
+      </div>
+    </div>
   </main>
 
   <footer class="site-footer">
-    <a class="brand" href="/">
-      <span class="brand-symbol"><span></span><span></span></span>
-      <span class="brand-name">campus<span>find</span><small>SAI UNIVERSITY COMMUNITY BOARD</small></span>
-    </a>
-    <p>Sai University Academic Project · 2026</p>
-    <div>
-      <a href="/pages/lost-items.html">Lost items</a>
-      <a href="/pages/found-items.html">Found items</a>
-      <a href="/pages/report.html">Report an item</a>
+    <div>CampusFind — Sai University Web Technology Project (2026)</div>
+    <div class="footer-links">
+      <a href="/pages/lost-items.html">Lost</a>
+      <a href="/pages/found-items.html">Found</a>
+      <a href="/pages/report.html">Report</a>
+      <a href="/pages/how-it-works.html">How It Works</a>
     </div>
   </footer>
 

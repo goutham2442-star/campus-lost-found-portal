@@ -3,155 +3,120 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Report an item | CampusFind — Sai University</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Report an Item | CampusFind — Sai University</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <div class="announcement">
-    <span class="announcement-dot"></span> Every helpful report brings someone one step closer 
-    <a href="/pages/how-it-works.html">How it works ↗</a>
+  <div class="top-notice">
+    Sai University Lost & Found Portal — Student Project
+    <a href="/pages/how-it-works.html">How it works</a>
   </div>
 
-  <header class="site-header">
-    <a class="brand" href="/">
-      <span class="brand-symbol"><span></span><span></span></span>
-      <span class="brand-name">campus<span>find</span><small>SAI UNIVERSITY COMMUNITY BOARD</small></span>
+  <header class="site-navbar">
+    <a class="brand-title" href="/">
+      🎓 Campus<span>Find</span>
     </a>
-    <button class="mobile-menu" id="mobile-menu" aria-label="Toggle navigation">☰</button>
-    <nav class="main-nav" id="main-nav">
-      <a href="/">Discover</a>
-      <a href="/pages/lost-items.html">Lost items</a>
-      <a href="/pages/found-items.html">Found items</a>
-      <a href="/pages/how-it-works.html">How it works</a>
-    </nav>
-    <div class="header-actions">
-      <!-- Populated by app.js -->
+    <ul class="nav-links" id="main-nav">
+      <li><a href="/">Home</a></li>
+      <li><a href="/pages/lost-items.html">Lost Items</a></li>
+      <li><a href="/pages/found-items.html">Found Items</a></li>
+      <li><a href="/pages/how-it-works.html">How It Works</a></li>
+    </ul>
+    <div class="nav-user-actions header-actions">
+      <!-- Injected by app.js based on auth state -->
     </div>
   </header>
 
-  <main>
-    <section class="page-hero">
-      <div class="eyebrow"><span class="eyebrow-line"></span> ADD YOUR PIECE TO THE PUZZLE</div>
-      <h1>Every little detail<br>can <em>make a difference.</em></h1>
-      <p>Tell the campus community what went missing—or what you found. Keep private serials or security details safe.</p>
-    </section>
+  <div class="page-header-box">
+    <h1>Report an Item</h1>
+    <p>Submit details about an item you lost or found on campus so it can be reunited with its owner.</p>
+  </div>
 
-    <section class="page-content">
-      <div class="report-layout">
-        <div class="form-card">
-          <h2>Tell us about the item.</h2>
-          <p>Fields marked with * are required. Our intelligent system checks for matching reports in real time.</p>
+  <main class="container">
+    <div class="form-grid">
+      <div class="form-panel">
+        <h2>Item Information</h2>
+        
+        <!-- Duplicate alert container -->
+        <div id="duplicate-alert-container"></div>
 
-          <!-- Duplicate Item Alert Box Container -->
-          <div id="duplicate-alert-container"></div>
-
-          <form id="report-page-form" enctype="multipart/form-data">
-            <div class="form-two-col">
-              <label>
-                What kind of report? *
-                <select name="type" id="report-type" required>
-                  <option value="Lost">I lost something</option>
-                  <option value="Found">I found something</option>
-                </select>
-              </label>
-              <label>
-                Category *
-                <select name="category" required>
-                  <option value="Electronics">Electronics</option>
-                  <option value="Accessories">Accessories</option>
-                  <option value="ID & Cards">ID & Cards</option>
-                  <option value="Keys">Keys</option>
-                  <option value="Books & Notes">Books & Notes</option>
-                  <option value="Clothing">Clothing</option>
-                  <option value="Other">Other</option>
-                </select>
-              </label>
+        <form id="report-page-form" enctype="multipart/form-data">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Report Type *</label>
+              <select name="type" id="report-type" required>
+                <option value="Lost">I lost something</option>
+                <option value="Found">I found something</option>
+              </select>
             </div>
-
-            <label>
-              Item name / brief title *
-              <input name="name" maxlength="80" required placeholder="e.g. Navy blue metal bottle / Sony Earbuds">
-            </label>
-
-            <div class="form-two-col">
-              <label>
-                Where was it lost or found? *
-                <input name="location" maxlength="100" required placeholder="e.g. Library 1st Floor / Block C Room 204">
-              </label>
-              <label>
-                Date *
-                <input name="date" type="date" required>
-              </label>
-            </div>
-
-            <label>
-              Helpful details & description *
-              <textarea name="description" rows="4" maxlength="1000" required placeholder="Colour, brand, stickers, keychain, or visible identifying details..."></textarea>
-            </label>
-
-            <!-- Image Upload Section -->
-            <label>
-              Item Photo (Optional but highly recommended)
-              <div class="upload-dropzone" onclick="document.querySelector('#item-image-input').click()">
-                <div style="font-size:24px;margin-bottom:6px;">📷</div>
-                <strong style="font-size:12px;color:var(--plum);">Click to select or drag & drop an image</strong>
-                <p style="font-size:10px;color:#9b94a6;margin:4px 0 0;">JPG, PNG, or WebP up to 5MB</p>
-                <input type="file" id="item-image-input" name="image" accept="image/jpeg,image/png,image/webp" style="display:none;">
-                <img id="item-image-preview" class="image-preview" alt="Upload preview">
-              </div>
-            </label>
-
-            <p class="form-message" id="report-page-message" role="status"></p>
-            <button class="button button-plum" type="submit">Publish to Community Board <span>↗</span></button>
-          </form>
-        </div>
-
-        <aside>
-          <div class="side-card">
-            <h3>A few helpful tips.</h3>
-            <p>Clear details make matching much faster.</p>
-            <div class="side-tip">
-              <div class="side-tip-icon">✎</div>
-              <div>
-                <strong>Be specific</strong>
-                <span>Colour, shape, and unique marks can immediately help identify an item.</span>
-              </div>
-            </div>
-            <div class="side-tip">
-              <div class="side-tip-icon">⌖</div>
-              <div>
-                <strong>Share a useful place</strong>
-                <span>Name the campus hall, academic block, or recreation facility.</span>
-              </div>
-            </div>
-            <div class="side-tip">
-              <div class="side-tip-icon">♡</div>
-              <div>
-                <strong>Smart Duplicate Alerts</strong>
-                <span>Our system compares keywords as you type to notify you of potential matches.</span>
-              </div>
-            </div>
-            <div class="info-callout">
-              Notice: Do not post banking pin codes, sensitive national ID numbers, or passwords.
+            <div class="form-group">
+              <label>Category *</label>
+              <select name="category" required>
+                <option value="Electronics">Electronics</option>
+                <option value="Accessories">Accessories</option>
+                <option value="ID & Cards">ID & Cards</option>
+                <option value="Keys">Keys</option>
+                <option value="Books & Notes">Books & Notes</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Other">Other</option>
+              </select>
             </div>
           </div>
-        </aside>
+
+          <div class="form-group">
+            <label>Item Name / Short Title *</label>
+            <input type="text" name="name" maxlength="80" required placeholder="e.g. Navy blue metal bottle or Sony Earbuds">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Campus Location *</label>
+              <input type="text" name="location" maxlength="100" required placeholder="e.g. Library 1st Floor or Block C Room 204">
+            </div>
+            <div class="form-group">
+              <label>Date *</label>
+              <input type="date" name="date" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Description & Identifying Details *</label>
+            <textarea name="description" rows="4" maxlength="1000" required placeholder="Describe colour, brand, stickers, scratches, or unique features..."></textarea>
+          </div>
+
+          <!-- Image upload -->
+          <div class="form-group">
+            <label>Item Photo (Optional)</label>
+            <div class="file-dropzone" onclick="document.querySelector('#item-image-input').click()">
+              <p style="margin: 0; color: #64748b; font-size: 13px;">📷 Click to select an image (JPG, PNG, WebP up to 5MB)</p>
+              <input type="file" id="item-image-input" name="image" accept="image/jpeg,image/png,image/webp" style="display:none;">
+              <img id="item-image-preview" class="preview-img" alt="Preview">
+            </div>
+          </div>
+
+          <p id="report-page-message" style="margin-top: 10px; font-weight: 500; font-size: 13px;"></p>
+          <button class="btn btn-primary" type="submit" style="margin-top: 8px;">Publish Report</button>
+        </form>
       </div>
-    </section>
+
+      <div class="info-panel">
+        <h3>Tips for Reporting</h3>
+        <p style="color:#64748b; font-size:13px; line-height: 1.6; margin-bottom: 14px;">
+          • <strong>Be specific:</strong> Mention colors, logos, or visible marks.<br>
+          • <strong>Location:</strong> Mention the specific building and classroom/floor.<br>
+          • <strong>Keep private:</strong> Never post sensitive passwords or full bank cards.
+        </p>
+      </div>
+    </div>
   </main>
 
   <footer class="site-footer">
-    <a class="brand" href="/">
-      <span class="brand-symbol"><span></span><span></span></span>
-      <span class="brand-name">campus<span>find</span><small>SAI UNIVERSITY COMMUNITY BOARD</small></span>
-    </a>
-    <p>Sai University Academic Project · 2026</p>
-    <div>
-      <a href="/pages/how-it-works.html">How it works</a>
-      <a href="/pages/my-activity.html">My activity</a>
+    <div>CampusFind — Sai University Web Technology Project (2026)</div>
+    <div class="footer-links">
+      <a href="/pages/lost-items.html">Lost</a>
+      <a href="/pages/found-items.html">Found</a>
+      <a href="/pages/report.html">Report</a>
+      <a href="/pages/how-it-works.html">How It Works</a>
     </div>
   </footer>
 
