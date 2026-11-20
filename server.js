@@ -1,18 +1,3 @@
-/**
- * =====================================================================
- * CAMPUSFIND — MAIN APPLICATION SERVER (server.js)
- * Academic Full-Stack Web Technology Project · Sai University
- * =====================================================================
- * 
- * HOW TO EXPLAIN THIS FILE IN CLASS:
- * "server.js is the entry point of our entire backend application.
- *  It accomplishes 4 clean responsibilities:
- *  1. Loads security middleware (Helmet, CORS, Rate-Limiting).
- *  2. Serves frontend web pages from the /public folder.
- *  3. Connects the modular REST API routes (/api/auth, /api/items, etc.).
- *  4. Initializes the persistent database and starts the HTTP server on Port 3000."
- */
-
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
@@ -20,95 +5,82 @@ const cors = require("cors");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 
-// 1. Database & Seeder
 const { initDB } = require("./src/config/db");
 const ItemRepository = require("./src/repositories/ItemRepository");
 const seedDatabase = require("./src/scripts/seed");
 
-// 2. Modular API Route Handlers
+// Route handlers
 const authRoutes = require("./src/routes/auth");
 const itemRoutes = require("./src/routes/items");
 const claimRoutes = require("./src/routes/claims");
 const notificationRoutes = require("./src/routes/notifications");
 const statRoutes = require("./src/routes/stats");
 
-// 3. Initialize Express App
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 4. Security & Safety Middleware
+// Security and CORS
 app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
 app.use(cors());
 
-// Rate Limiter: Protects portal against brute-force attacks (max 300 requests per 15 mins)
-const apiLimiter = rateLimit({
+// Basic rate limiting
+const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 300,
-  message: { success: false, message: "Too many requests. Please try again later." }
+  message: { success: false, message: "Too many requests, please try again later." }
 });
-app.use("/api", apiLimiter);
+app.use("/api", limiter);
 
-// 5. Body Parsing (JSON and URL-Encoded forms)
+// Request parsing
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// 6. Serve Frontend Static Assets (HTML, CSS, Client JS, Uploads)
+// Static files
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 
-// 7. Mount REST API Routes
-app.use("/api/auth", authRoutes);                  // Login, Register, Profile
-app.use("/api/items", itemRoutes);                // Lost & Found CRUD, Duplicate Alerts
-app.use("/api/claims", claimRoutes);              // Claims submission & Admin approvals
-app.use("/api/notifications", notificationRoutes);// User notifications
-app.use("/api/stats", statRoutes);                // Live dashboards & analytics telemetry
+// API routes
+app.use("/api/auth", authRoutes);
+app.use("/api/items", itemRoutes);
+app.use("/api/claims", claimRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/stats", statRoutes);
 
-// 8. Server Healthcheck
+// Health check
 app.get("/api/health", (req, res) => {
-  res.json({
-    status: "healthy",
-    timestamp: new Date().toISOString(),
-    service: "CampusFind Lost and Found Portal — Sai University"
-  });
+  res.json({ status: "healthy", service: "CampusFind - Sai University" });
 });
 
-// 9. Centralized Error Handling
+// Error handler
 app.use((err, req, res, next) => {
-  console.error("[Server Error]", err.message);
+  console.error("Error:", err.message);
   if (err.name === "MulterError") {
-    return res.status(400).json({ success: false, message: `File upload error: ${err.message}` });
+    return res.status(400).json({ success: false, message: err.message });
   }
   res.status(err.status || 500).json({
     success: false,
-    message: err.message || "An internal server error occurred."
+    message: err.message || "Internal server error"
   });
 });
 
-// 10. Start Server and Initialize Database (Only when run directly, not when imported by Vercel serverless)
+// Start server
 if (require.main === module) {
-  async function startServer() {
+  async function start() {
     try {
       await initDB();
-
-      const itemCount = await ItemRepository.count();
-      if (itemCount === 0) {
-        console.log("[Setup] Database empty. Seeding initial campus records...");
+      const count = await ItemRepository.count();
+      if (count === 0) {
+        console.log("Seeding initial items...");
         await seedDatabase();
       }
-
       app.listen(PORT, () => {
-        console.log(`=======================================================`);
-        console.log(`🚀 CampusFind is live at: http://localhost:${PORT}`);
-        console.log(`🎓 Sai University Web Technology Project`);
-        console.log(`=======================================================`);
+        console.log(`Server running at http://localhost:${PORT}`);
       });
     } catch (err) {
-      console.error("Critical: Failed to start server:", err);
-      process.exit(1);
+      console.error("Failed to start server:", err);
     }
   }
-
-  startServer();
+  start();
 }
 
 module.exports = app;
