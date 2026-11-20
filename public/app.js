@@ -247,7 +247,7 @@ function cardMarkup(item, compact = false) {
           <p>${esc(item.description)}</p>
           <div class="mini-item-bottom">
             <span>⌖ ${esc(item.location)}</span>
-            <a href="/pages/${isFound ? 'found-items' : 'lost-items'}.html">View Details ↗</a>
+            <a href="/pages/item-details.html?id=${itemId}">View Details ↗</a>
           </div>
         </div>
       </article>
@@ -267,10 +267,13 @@ function cardMarkup(item, compact = false) {
         <p>${esc(item.description)}</p>
         <div class="mini-item-bottom">
           <span>⌖ ${esc(item.location)}</span>
-          ${isFound && item.status !== "Returned"
-            ? `<button class="button button-plum button-small" onclick="openClaimModal('${itemId}', '${esc(item.name).replace(/'/g, "\\'")}')">Claim ↗</button>`
-            : `<span>${esc(item.status || "Searching")}</span>`
-          }
+          <div style="display:flex;gap:8px;align-items:center;">
+            <a href="/pages/item-details.html?id=${itemId}" class="text-link" style="font-size:11px;">Details ↗</a>
+            ${isFound && item.status !== "Returned"
+              ? `<button class="button button-plum button-small" onclick="openClaimModal('${itemId}', '${esc(item.name).replace(/'/g, "\\'")}')">Claim</button>`
+              : `<span>${esc(item.status || "Searching")}</span>`
+            }
+          </div>
         </div>
       </div>
     </article>

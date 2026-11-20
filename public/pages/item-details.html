@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Item Details | CampusFind — Sai University</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    .item-detail-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 32px;
+      padding: 32px;
+      margin-top: 24px;
+    }
+    .item-detail-image-box {
+      background: var(--plum-subtle);
+      border-radius: var(--radius-sm);
+      min-height: 280px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid var(--line-light);
+    }
+    .item-detail-image-box img {
+      width: 100%;
+      height: 100%;
+      max-height: 380px;
+      object-fit: cover;
+    }
+    .item-detail-image-box span {
+      font-size: 80px;
+    }
+    .item-meta-table {
+      width: 100%;
+      margin: 20px 0;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .item-meta-table td {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line-light);
+    }
+    .item-meta-table td:first-child {
+      color: var(--muted);
+      width: 35%;
+      font-weight: 600;
+    }
+    .item-meta-table td:last-child {
+      color: var(--ink);
+      font-weight: 500;
+    }
+    @media (max-width: 800px) {
+      .item-detail-card {
+        grid-template-columns: 1fr;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="announcement">
+    <span class="announcement-dot"></span> Sai University Lost & Found Portal — Item Information & Verification
+    <a href="/pages/how-it-works.html">How it works ↗</a>
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="/">
+      <span class="brand-symbol"><span></span><span></span></span>
+      <span class="brand-name">campus<span>find</span><small>SAI UNIVERSITY COMMUNITY BOARD</small></span>
+    </a>
+    <button class="mobile-menu" id="mobile-menu" aria-label="Toggle navigation">☰</button>
+    <nav class="main-nav" id="main-nav">
+      <a href="/">Discover</a>
+      <a href="/pages/lost-items.html">Lost items</a>
+      <a href="/pages/found-items.html">Found items</a>
+      <a href="/pages/how-it-works.html">How it works</a>
+    </nav>
+    <div class="header-actions">
+      <!-- Injected by app.js -->
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="eyebrow"><span class="eyebrow-line"></span> ITEM SPECIFICATIONS & STATUS</div>
+      <h1 id="detail-header-title">Item <em>Details.</em></h1>
+      <p id="detail-header-subtitle">Review the reported information, campus location, and current recovery status.</p>
+    </section>
+
+    <section class="page-content" style="max-width: 960px; margin: 0 auto;">
+      <div style="margin-bottom: 16px;">
+        <a href="javascript:history.back()" class="text-link" style="font-weight: 600;">← Back to listings</a>
+      </div>
+
+      <div id="detail-container">
+        <p>Loading item details…</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="brand" href="/">
+      <span class="brand-symbol"><span></span><span></span></span>
+      <span class="brand-name">campus<span>find</span><small>SAI UNIVERSITY COMMUNITY BOARD</small></span>
+    </a>
+    <p>Sai University Academic Project · 2026</p>
+    <div>
+      <a href="/pages/lost-items.html">Lost items</a>
+      <a href="/pages/found-items.html">Found items</a>
+      <a href="/pages/report.html">Report an item</a>
+    </div>
+  </footer>
+
+  <script src="/app.js"></script>
+  <script>
+    async function loadItemDetail() {
+      const params = new URLSearchParams(window.location.search);
+      const itemId = params.get("id");
+      const container = document.querySelector("#detail-container");
+
+      if (!itemId) {
+        container.innerHTML = `
+          <div class="page-empty">
+            <h3>No item selected</h3>
+            <p>Please browse the community board and select an item to view its details.</p>
+            <a class="button button-plum" href="/pages/found-items.html">Browse Found Items ↗</a>
+          </div>
+        `;
+        return;
+      }
+
+      try {
+        const data = await apiFetch(`/api/items/${itemId}`);
+        const item = data.item;
+        if (!item) throw new Error("Item not found");
+
+        const isFound = item.type === "Found";
+        const imageOrEmoji = item.imageUrl
+          ? `<img src="${esc(item.imageUrl)}" alt="${esc(item.name)}">`
+          : `<span>${esc(item.emoji || "📦")}</span>`;
+
+        document.querySelector("#detail-header-title").innerHTML = `${esc(item.name)} <em>(${esc(item.type)})</em>`;
+
+        container.innerHTML = `
+          <div class="item-detail-card">
+            <div class="item-detail-image-box">
+              ${imageOrEmoji}
+            </div>
+
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="mini-item-badge ${isFound ? 'badge-found' : 'badge-lost'}" style="position:static;">
+                  ${esc(item.type.toUpperCase())} REPORT
+                </span>
+                <span class="pill ${item.status === 'Active' ? '' : item.status === 'Claimed' ? 'claimed' : 'pending'}">
+                  Status: ${esc(item.status || "Active")}
+                </span>
+              </div>
+
+              <h2 style="font:800 24px Manrope; margin: 16px 0 8px; color:var(--ink);">${esc(item.name)}</h2>
+              <p style="color:var(--ink-light); font-size:13px; line-height:1.7;">${esc(item.description)}</p>
+
+              <table class="item-meta-table">
+                <tr>
+                  <td>Category</td>
+                  <td>${esc(item.category)}</td>
+                </tr>
+                <tr>
+                  <td>Location Last Seen / Found</td>
+                  <td>📍 ${esc(item.location)}</td>
+                </tr>
+                <tr>
+                  <td>Date Reported</td>
+                  <td>📅 ${esc(niceDate(item.date))}</td>
+                </tr>
+                <tr>
+                  <td>Reported By</td>
+                  <td>👤 ${esc(item.owner?.name || "Campus Community Member")} (${esc(item.owner?.department || "Student")})</td>
+                </tr>
+              </table>
+
+              <div style="margin-top: 24px; display:flex; gap: 14px; align-items:center;">
+                ${isFound && item.status !== "Returned" ? `
+                  <button class="button button-plum" onclick="openClaimModal('${item.id || item._id}', '${esc(item.name).replace(/'/g, "\\'")}')">
+                    Submit Ownership Claim ↗
+                  </button>
+                ` : isFound && item.status === "Returned" ? `
+                  <span class="pill" style="font-size:12px; padding:8px 14px;">✓ Item Successfully Reunited with Owner</span>
+                ` : `
+                  <span style="font-size:12px; color:var(--muted);">Owner is actively searching for this item on campus.</span>
+                `}
+                <a class="button button-outline" href="/pages/report.html">Report Another Item</a>
+              </div>
+            </div>
+          </div>
+        `;
+      } catch (err) {
+        container.innerHTML = `
+          <div class="page-empty">
+            <h3>Unable to load item</h3>
+            <p>${esc(err.message)}</p>
+            <a class="button button-outline" href="/pages/found-items.html">Back to Listings</a>
+          </div>
+        `;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadItemDetail();
+    });
+  </script>
+</body>
+</html>
